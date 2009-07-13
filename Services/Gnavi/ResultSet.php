@@ -12,7 +12,7 @@
  * send a note to license@php.net so we can mail you a copy immediately.
  *
  * @category  Services
- * @package   Services_Hanako
+ * @package   Services_Gnavi
  * @author    Kiryu Tsukimiya <tsukimiya@gmail.com>
  * @copyright 2009 Kiryu Tsukimiya
  * @license   http://www.php.net/license/3_01.txt The PHP License, version 3.01
