@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Webservices for Gurunavi
+ * Webservices for GOURMET NAVIGATOR
  *
  * PHP version 5
  *
