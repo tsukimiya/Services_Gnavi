@@ -47,6 +47,17 @@ class Services_Gnavi
   );
   
   /**
+   * 半径種別
+   * 
+   * @var integer
+   */
+  const RANGE_300  = 1;
+  const RANGE_500  = 2;
+  const RANGE_1000 = 3;
+  const RANGE_2000 = 4;
+  const RANGE_3000 = 5;
+  
+  /**
    * API access key
    * 
    * @var string
