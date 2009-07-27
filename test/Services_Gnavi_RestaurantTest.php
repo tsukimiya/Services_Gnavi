@@ -61,3 +61,19 @@ try {
 } catch (Exception $ex) {
   $t->is($ex->getMessage(), 'Invalid Shop Number', 'Exception');
 }
+
+$t->diag('Restaurant search test: 30件取得');
+
+$params = array(
+  'latitude'     => '35.657784',
+  'longitude'    => '139.704037',
+  'range'        => '5',
+  'hit_per_page' => '30',
+  'sort' => '1',
+);
+
+$rs = $gnavi->searchRestaurant($params);
+
+$res = $rs->getResults();
+
+$t->is(count($res), 30, '30件取得できているか');
