@@ -77,3 +77,19 @@ $rs = $gnavi->searchRestaurant($params);
 $res = $rs->getResults();
 
 $t->is(count($res), 30, '30件取得できているか');
+
+try {
+  $params = array(
+  //  'area' => 'AREA110',
+  //  'pref' => 'PREF13',
+    'hit_per_page' => '999',
+    'sort' => '1',
+  );
+  
+  $rs = $gnavi->searchRestaurant($params);
+  $res = $rs->getResults();
+  $t->diag('count: '.count($res));
+  $t->diag('page'.$rs->getTotalHitCount());
+} catch (Exception $ex) {
+  $t->is($ex->getMessage(), 'Invalid Shop Number', 'Exception');
+}

@@ -182,13 +182,13 @@ class Services_Gnavi
     
     $fp = @fopen($url, 'r', false, $context);
     if (!$fp) {
-      throw new Exception("Problem with ".$url);
+      throw new Exception("Problem with: ".$url);
     }
     
     $response = @stream_get_contents($fp);
     
     if ($response === false) {
-      throw new Exception ("Problem reading data from ".$url);
+      throw new Exception ("Problem reading data from: ".$url);
     }
     
     $xml = simplexml_load_string($response);
@@ -196,7 +196,7 @@ class Services_Gnavi
     // エラーチェック
     if (isset($xml->error)) {
       $code = (int)$xml->error->code;
-      throw new Exception($this->getErrorMessage($code), $code);
+      throw new Exception($this->getErrorMessage($code).": ".$url , $code);
     }
     
     return $xml;
