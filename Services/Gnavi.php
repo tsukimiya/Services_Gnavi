@@ -78,9 +78,24 @@ class Services_Gnavi
   public function searchRestaurant($parameters = array())
   {
     include_once('Gnavi/ResultSet.php');
+    try {
+      $xml = $this->sendRequest('restaurant_search', $parameters);
+      return new Services_Gnavi_ResultSet($xml);
+    } catch (Exception $ex) {
+      if ($ex->getCode() == 600) {
+        $xml = simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?>
+<response>
+  <total_hit_count>0</total_hit_count>
+  <hit_per_page>0</hit_per_page>
+  <page_offset>0</page_offset>
+</response>');
+        return new Services_Gnavi_ResultSet($xml);
+      } else {
+        throw $ex;
+      }
+    }
     
-    $xml = $this->sendRequest('restaurant_search', $parameters);
-    return new Services_Gnavi_ResultSet($xml);
+    
   }
   
   /**

@@ -59,7 +59,7 @@ try {
   $rs = $gnavi->searchRestaurant($params);
   $t->fail('不正なidで処理を完了してしまった');
 } catch (Exception $ex) {
-  $t->is($ex->getMessage(), 'Invalid Shop Number', 'Exception');
+  $t->like($ex->getMessage(), '~^Invalid Shop Number~', 'Exception');
 }
 
 $t->diag('Restaurant search test: 30件取得');
@@ -89,7 +89,24 @@ try {
   $rs = $gnavi->searchRestaurant($params);
   $res = $rs->getResults();
   $t->diag('count: '.count($res));
-  $t->diag('page'.$rs->getTotalHitCount());
+  $t->diag('page: '.$rs->getTotalHitCount());
 } catch (Exception $ex) {
   $t->is($ex->getMessage(), 'Invalid Shop Number', 'Exception');
+}
+
+$t->diag('検索結果が0件');
+
+try {
+  $params = array(
+    'latitude' => 35.907962,
+    'longitude' => 139.198837,
+    'hit_per_page' => 10,
+    'sort' => 1,
+    'range' => 5
+  );
+  
+  $rs = $gnavi->searchRestaurant($params);
+  $t->is($rs->getTotalHitCount(), 0, '検索結果が0件');
+} catch (Exception $ex) {
+  
 }
