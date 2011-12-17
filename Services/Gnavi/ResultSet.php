@@ -23,43 +23,43 @@
 
 class Services_Gnavi_ResultSet
 {
-  public $xml; 
-  
+  public $xml;
+
   public function __construct(SimpleXMLElement $xml)
   {
     $this->xml = $xml;
   }
-  
+
   /**
    * 該当件数
-   * 
+   *
    * @return integer
    */
   public function getTotalHitCount()
   {
     return (int)$this->xml->total_hit_count;
   }
-  
+
   /**
    * 表示件数
-   * 
+   *
    * @return integer
    */
   public function getHitPerPage()
   {
     return (int)$this->xml->hit_per_page;
   }
-  
+
   /**
    * 表示ページ
-   * 
+   *
    * @return unknown_type
    */
   public function getPageOffset()
   {
     return (int)$this->xml->page_offset;
   }
-  
+
   public function getResults()
   {
     return $this->xml->rest;

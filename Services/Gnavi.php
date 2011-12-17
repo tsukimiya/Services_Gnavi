@@ -27,16 +27,16 @@ class Services_Gnavi
    * Version
    */
   private static $version = "0.1.0";
-  
+
   /**
    * API baseurl
-   * 
+   *
    */
   private $baseurl = 'http://api.gnavi.co.jp/ver1/';
-  
+
   /**
    * API actions
-   * 
+   *
    */
   private $actions = array(
     'restaurant_search'     => 'RestSearchAPI',
@@ -45,10 +45,10 @@ class Services_Gnavi
     'category_large_serach' => 'CategoryLargeSearchAPI',
     'category_small_search' => 'CategorySmallSearchAPI',
   );
-  
+
   /**
    * 半径種別
-   * 
+   *
    * @var integer
    */
   const RANGE_300  = 1;
@@ -56,17 +56,17 @@ class Services_Gnavi
   const RANGE_1000 = 3;
   const RANGE_2000 = 4;
   const RANGE_3000 = 5;
-  
+
   /**
    * API access key
-   * 
+   *
    * @var string
    */
   private $access_key;
-  
+
   /**
    * constructer
-   * 
+   *
    * @param $access_key
    * @return unknown_type
    */
@@ -74,7 +74,7 @@ class Services_Gnavi
   {
     $this->access_key = $access_key;
   }
-  
+
   public function searchRestaurant($parameters = array())
   {
     include_once('Gnavi/ResultSet.php');
@@ -94,13 +94,13 @@ class Services_Gnavi
         throw $ex;
       }
     }
-    
-    
+
+
   }
-  
+
   /**
    * エリアマスタを取得する
-   * 
+   *
    * @return array
    */
   public function getAreaMaster()
@@ -110,10 +110,10 @@ class Services_Gnavi
     foreach($xml as $obj) {
       $results[(string)$obj->area_code] = (string)$obj->area_name;
     }
-    
+
     return $results;
   }
-  
+
   public function getPreferenceMaster()
   {
     $xml = $this->sendRequest('preference_search');
@@ -124,13 +124,13 @@ class Services_Gnavi
         'area_code' => (string)$obj->area_code,
       );
     }
-    
+
     return $results;
   }
-  
+
   /**
    * 大カテゴリマスタ一覧を取得する
-   * 
+   *
    * @return array
    */
   public function getCategoryLargeMaster()
@@ -140,13 +140,13 @@ class Services_Gnavi
     foreach($xml as $obj) {
       $results[(string)$obj->category_l_code] = (string)$obj->category_l_name;
     }
-    
+
     return $results;
   }
-  
+
   /**
    * 小カテゴリマスタ一覧を取得する
-   * 
+   *
    * @return array
    */
   public function getCategorySmallMaster()
@@ -159,13 +159,13 @@ class Services_Gnavi
         'category_l_code' => (string)$obj->category_l_code,
       );
     }
-    
+
     return $results;
   }
-  
+
   /**
    * gnaviに問いあわせを行い、xmlを取得する
-   * 
+   *
    * @param string $action
    * @param array  $parameters
    * @return SimpleXml
@@ -174,7 +174,7 @@ class Services_Gnavi
   {
     $parameters = array_merge(array('keyid' => $this->access_key), $parameters);
     $url = $this->baseurl . $this->actions[$action] .'/?';
-    
+
     foreach($parameters as $key => $val) {
       if ($key == 'id') {
         // idだけはURLエンコードしたらだめ
@@ -183,40 +183,40 @@ class Services_Gnavi
         $query_strings[] = sprintf("%s=%s", $key, urlencode($val));
       }
     }
-    
+
     $url = $url . implode('&', $query_strings);
-    
+
     $opts = array(
       'http' => array(
         'method' => 'GET',
         'user_agent' => __CLASS__ . '/' . self::$version
       )
     );
-    
+
     $context = stream_context_create($opts);
-    
+
     $fp = @fopen($url, 'r', false, $context);
     if (!$fp) {
       throw new Exception("Problem with: ".$url);
     }
-    
+
     $response = @stream_get_contents($fp);
-    
+
     if ($response === false) {
       throw new Exception ("Problem reading data from: ".$url);
     }
-    
+
     $xml = simplexml_load_string($response);
-    
+
     // エラーチェック
     if (isset($xml->error)) {
       $code = (int)$xml->error->code;
       throw new Exception($this->getErrorMessage($code).": ".$url , $code);
     }
-    
+
     return $xml;
   }
-  
+
   private function getErrorMessage($code)
   {
     $messages = array(
