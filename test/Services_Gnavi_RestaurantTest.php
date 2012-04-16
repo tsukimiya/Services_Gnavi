@@ -85,7 +85,7 @@ try {
     'hit_per_page' => '999',
     'sort' => '1',
   );
-  
+
   $rs = $gnavi->searchRestaurant($params);
   $res = $rs->getResults();
   $t->diag('count: '.count($res));
@@ -104,9 +104,9 @@ try {
     'sort' => 1,
     'range' => 5
   );
-  
+
   $rs = $gnavi->searchRestaurant($params);
   $t->is($rs->getTotalHitCount(), 0, '検索結果が0件');
 } catch (Exception $ex) {
-  
+
 }
